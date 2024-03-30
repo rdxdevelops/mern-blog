@@ -19,7 +19,6 @@ import { useEffect, useRef } from "react";
 
 export default function Footer() {
   const footerIconContainerRef = useRef();
-  
   useEffect(() => {
     footerIconContainerRef.current
       .querySelectorAll("svg")
