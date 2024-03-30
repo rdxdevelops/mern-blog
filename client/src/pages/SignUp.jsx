@@ -97,7 +97,7 @@ export default function SignUp() {
                   <span className="pl-3">Signing up...</span>
                 </>
               ) : (
-                "Sign up"
+                "Sign Up"
               )}
             </Button>
           </form>
