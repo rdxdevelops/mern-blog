@@ -15,7 +15,23 @@ import {
   BsGithub,
   BsDribbble,
 } from "react-icons/bs";
+import { useEffect, useRef } from "react";
+
 export default function Footer() {
+  const footerIconContainerRef = useRef();
+  
+  useEffect(() => {
+    footerIconContainerRef.current
+      .querySelectorAll("svg")
+      .forEach((svg) =>
+        svg.classList.add(
+          "hover:scale-125",
+          "transition-transform",
+          "duration-300"
+        )
+      );
+  }, []);
+
   return (
     <FlowbiteFooter container className="border border-t-8 border-teal-500">
       <div className="w-full max-w-7xl mx-auto">
@@ -76,14 +92,16 @@ export default function Footer() {
             by="Rahul's Blog"
             year={new Date().getFullYear()}
           />
-          <div className="flex gap-6 sm:justify-center sm:mt-0 mt-4">
+          <div
+            className="flex gap-6 sm:justify-center sm:mt-0 mt-4"
+            ref={footerIconContainerRef}>
             <FooterIcon href="#" icon={BsFacebook} />
+            <FooterIcon href="#" icon={BsInstagram} />
+            <FooterIcon href="#" icon={BsTwitterX} />
             <FooterIcon
               href="https://www.github.com/rdxdevelops"
-              icon={BsInstagram}
+              icon={BsGithub}
             />
-            <FooterIcon href="#" icon={BsTwitterX} />
-            <FooterIcon href="#" icon={BsGithub} />
             <FooterIcon href="#" icon={BsDribbble} />
           </div>
         </div>
