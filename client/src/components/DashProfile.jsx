@@ -145,10 +145,10 @@ export default function DashProfile() {
     try {
       const res = await fetch("/api/user/signout", { method: "POST" });
       const data = res.json();
-      if(!res.ok) {
-         console.log(data.message)
+      if (!res.ok) {
+        console.log(data.message);
       } else {
-        dispatch(signoutSuccess())
+        dispatch(signoutSuccess());
       }
     } catch (error) {
       console.log(error.message);
@@ -227,7 +227,7 @@ export default function DashProfile() {
           type="submit"
           outline
           gradientDuoTone="purpleToBlue"
-          disabled={loading}>
+          disabled={loading || imageFileUploading}>
           {loading ? (
             <>
               <Spinner size="sm" />
