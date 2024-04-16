@@ -28,6 +28,7 @@ import {
   signoutSuccess,
 } from "../redux/user/userSlice.js";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import {Link} from 'react-router-dom'
 export default function DashProfile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
@@ -237,6 +238,11 @@ export default function DashProfile() {
             "Update"
           )}
         </Button>
+
+        {currentUser.isAdmin && <Link to='/create-post'>
+            <Button type="button" className="w-full" gradientDuoTone='purpleToPink'>Create Post</Button>
+        </Link>}
+
       </form>
       <div className="flex justify-between text-red-500 mt-5">
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
