@@ -111,7 +111,7 @@ export default function DashProfile() {
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, imageFileUrl }),
+        body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (res.ok) {
