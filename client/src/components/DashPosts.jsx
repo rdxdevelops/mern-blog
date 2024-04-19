@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -21,6 +22,7 @@ export default function DashPosts() {
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
+          data.posts.length < 9 && setShowMore(false);
         }
       } catch (error) {
         console.log(error);
@@ -31,6 +33,21 @@ export default function DashPosts() {
       fetchPosts();
     }
   }, [currentUser._id, currentUser.isAdmin]);
+
+  const handleShowMore = async () => {
+    const startIndex = userPosts.length;
+    try {
+      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+      const data = await res.json();
+      if (res.ok) {
+        setUserPosts((prev) => [...prev, ...data.posts]);
+        data.posts.length < 9 && setShowMore(false);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     // the classes containing the word 'scrollbar' in the following div comes from the package tailwind-scrollbar
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
@@ -92,6 +109,14 @@ export default function DashPosts() {
               ))}
             </TableBody>
           </Table>
+          {showMore && (
+            <button
+              onClick={handleShowMore}
+              className="w-full self-center text-teal-500 text-sm py-7">
+              {" "}
+              Show more
+            </button>
+          )}
         </>
       ) : (
         <p>You have no posts yet.</p>
