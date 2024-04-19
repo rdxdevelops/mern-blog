@@ -10,7 +10,7 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 export default function CreatePost() {
   const [formData, setFormData] = useState({});
   const [imageFile, setImageFile] = useState(null);
@@ -18,7 +18,6 @@ export default function CreatePost() {
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
-  
 
   const handleUploadImage = async () => {
     try {
@@ -72,7 +71,7 @@ export default function CreatePost() {
       }
       if (res.ok) {
         setPublishError(null);
-        navigate(`/post/${data.slug}`)
+        navigate(`/post/${data.slug}`);
       }
     } catch (error) {
       setPublishError("Something went wrong. Try Again.");
@@ -99,8 +98,8 @@ export default function CreatePost() {
             }>
             <option value="uncategorized">Select a category</option>
             <option value="javascript">JavaScript</option>
-            <option value="reactjs">React.JS</option>
-            <option value="nextjs">Next.JS</option>
+            <option value="reactjs">ReactJS</option>
+            <option value="nextjs">NextJS</option>
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
@@ -145,9 +144,7 @@ export default function CreatePost() {
           required
           onChange={(value) => setFormData({ ...formData, content: value })}
         />
-        <Button
-          type="submit"
-          gradientDuoTone="purpleToPink">
+        <Button type="submit" gradientDuoTone="purpleToPink">
           Publish
         </Button>
         {publishError && <Alert color="failure">{publishError}</Alert>}
