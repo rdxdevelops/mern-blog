@@ -73,14 +73,46 @@ export const getposts = async (req, res, next) => {
 };
 
 export const deletepost = async (req, res, next) => {
-  const {postId, userId} = req.params;
-  if(userId !== req.user.id || !req.user.isAdmin) {
-    return next(errorHandler(403, 'You are not authorized to delete the post'))
+  const { postId, userId } = req.params;
+  if (userId !== req.user.id || !req.user.isAdmin) {
+    return next(errorHandler(403, "You are not authorized to delete the post"));
   }
   try {
     await Post.findByIdAndDelete(postId);
-    res.status(200).json('The post has been deleted');
+    res.status(200).json("The post has been deleted");
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
+export const updatepost = async (req, res, next) => {
+  const { postId, userId } = req.params;
+  if (userId !== req.user.id || !req.user.isAdmin) {
+    return next(errorHandler(403, "You are not authorized to update the post"));
+  }
+
+  const slug = req.body.title
+    .toLowerCase()
+    .split(" ")
+    .join("-")
+    .replace(/[^a-zA-Z0-9-]/g, "");
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $set: {
+          title: req.body.title,
+          slug: slug,
+          content: req.body.content,
+          category: req.body.category,
+          image: req.body.image,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    next(error);
+  }
+};
