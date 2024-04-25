@@ -10,7 +10,7 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function UpdatePost() {
@@ -22,6 +22,7 @@ export default function UpdatePost() {
   const navigate = useNavigate();
   const { postId } = useParams();
   const { currentUser } = useSelector((state) => state.user);
+  const { state: currentPost } = useLocation();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -41,8 +42,8 @@ export default function UpdatePost() {
       }
     };
 
-    fetchPost();
-  }, [postId]);
+    currentPost ? setFormData(currentPost) : fetchPost();
+  }, [postId, currentPost]);
 
   const handleUploadImage = async () => {
     try {
@@ -116,7 +117,7 @@ export default function UpdatePost() {
             placeholder="Title"
             id="title"
             className="flex-1"
-            value={formData.title || ''}
+            value={formData.title || ""}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
@@ -125,7 +126,7 @@ export default function UpdatePost() {
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
-            value={formData.category || 'uncategorized'}>
+            value={formData.category || "uncategorized"}>
             <option value="uncategorized">Select a category</option>
             <option value="javascript">JavaScript</option>
             <option value="reactjs">ReactJS</option>
@@ -162,7 +163,7 @@ export default function UpdatePost() {
         )}
         {formData.image && (
           <img
-            src={formData.image || ''}
+            src={formData.image || ""}
             alt="uploaded image"
             className="w-full h-72 object-cover"
           />

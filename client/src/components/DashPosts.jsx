@@ -110,7 +110,7 @@ export default function DashPosts() {
                     })}
                   </TableCell>
                   <TableCell>
-                    <Link to={`/post/${post.slug}`}>
+                    <Link to={`/post/${post.slug}`} state={post}>
                       <img
                         src={post.image}
                         alt={post.title}
@@ -121,7 +121,8 @@ export default function DashPosts() {
                   <TableCell>
                     <Link
                       className="font-medium text-gray-900 dark:text-white"
-                      to={`/post/${post.slug}`}>
+                      to={`/post/${post.slug}`}
+                      state={post}>
                       {post.title}
                     </Link>
                   </TableCell>
@@ -137,7 +138,7 @@ export default function DashPosts() {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <Link to={`/update-post/${post._id}`}>
+                    <Link to={`/update-post/${post._id}`} state={post}>
                       <span className="text-teal-500 hover:underline">
                         Edit
                       </span>
