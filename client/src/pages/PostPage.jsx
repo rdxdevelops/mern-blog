@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import CallToAction from "../components/CallToAction";
+import CommentSection from "../components/CommentSection";
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -14,10 +15,7 @@ export default function PostPage() {
       try {
         const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
         const data = await res.json();
-
-        if (!res.ok) {
-          setError("Error fetching post. Please try again.");
-        }
+        
         if (res.ok) {
           setPost(data.posts[0]);
           setError(null);
@@ -30,12 +28,22 @@ export default function PostPage() {
     currentPost ? setPost(currentPost) : fetchPost();
   }, [postSlug, currentPost]);
 
-  if (!post)
+  if (!post && !error)
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Spinner size="xl" />
       </div>
     );
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-center p-6 text-3xl text-red-500">
+          Something went wrong. Please try again...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
@@ -62,12 +70,17 @@ export default function PostPage() {
             year: "numeric",
           })}
         </span>
-        <span className="italic">{Math.round(post.content.length / 1000)} mins read</span>
+        <span className="italic">
+          {Math.round(post.content.length / 1000)} mins read
+        </span>
       </div>
-      <div dangerouslySetInnerHTML={{__html: post.content}} className="post-content p-3 max-w-2xl w-full mx-auto"></div>
+      <div
+        dangerouslySetInnerHTML={{ __html: post.content }}
+        className="post-content p-3 max-w-2xl w-full mx-auto"></div>
       <div className="max-w-4xl mx-auto w-full">
-        <CallToAction/>
+        <CallToAction />
       </div>
+      <CommentSection postId={post._id} />
     </main>
   );
 }
