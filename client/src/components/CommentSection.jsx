@@ -1,12 +1,15 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Alert, Button, Textarea } from "flowbite-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Comment from "./Comment";
 
 export default function CommentSection({ postId }) {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
+  const [allComments, setAllComments] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,12 +31,32 @@ export default function CommentSection({ postId }) {
       }
       if (res.ok) {
         setComment("");
-        setCommentError("null");
+        setCommentError(null);
+        setAllComments((prev) => [data, ...prev]);
       }
     } catch (error) {
       setCommentError(error.message);
     }
   };
+
+  useEffect(() => {
+    try {
+      setLoading(true);
+      const fetchComments = async () => {
+        const res = await fetch(`/api/comment/getpostcomments/${postId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setAllComments(data);
+          setLoading(false);
+        }
+      };
+
+      fetchComments();
+    } catch (error) {
+      setLoading(false);
+      console.log(error.message);
+    }
+  }, [postId]);
 
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
@@ -84,6 +107,24 @@ export default function CommentSection({ postId }) {
             </Alert>
           )}
         </form>
+      )}
+
+      {loading && <p className="text-center my-5">Loading...</p>}
+      
+      {allComments.length === 0 && !loading ? (
+        <p className="text-sm my-5"> No comments yet!</p>
+      ) : (
+        <>
+          <div className="text-sm my-5 flex items-center gap-1">
+            <p className="">Comments</p>
+            <div className="border borderd-gray-400 py-1 px-2 rounded-sm">
+              <p>{allComments.length}</p>
+            </div>
+          </div>
+          {allComments.map((comment) => (
+            <Comment key={comment._id} comment={comment} />
+          ))}
+        </>
       )}
     </div>
   );
