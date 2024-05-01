@@ -50,6 +50,9 @@ export default function CommentSection({ postId }) {
           setAllComments(data);
           setLoading(false);
         }
+        if (!res.ok) {
+          setLoading(false);
+        }
       };
 
       fetchComments();
@@ -85,6 +88,16 @@ export default function CommentSection({ postId }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleEditComment = (comment, editedContent) => {
+    setAllComments((allComments) =>
+      allComments.map((c) => {
+        return c._id === comment._id
+          ? { ...c, content: editedContent }
+          : c;
+      })
+    );
   };
 
   return (
@@ -151,7 +164,12 @@ export default function CommentSection({ postId }) {
             </div>
           </div>
           {allComments.map((comment) => (
-            <Comment key={comment._id} comment={comment} onLike={handleLike} />
+            <Comment
+              key={comment._id}
+              comment={comment}
+              onLike={handleLike}
+              onEditComment={handleEditComment}
+            />
           ))}
         </>
       )}
