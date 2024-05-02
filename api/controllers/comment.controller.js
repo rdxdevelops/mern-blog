@@ -96,3 +96,38 @@ export const deleteComment = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getComments = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(
+      errorHandler(403, "You are not allowed to get view all the comments")
+    );
+  }
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.order === "asc" ? 1 : -1;
+
+    const comments = await Comment.find()
+      .sort({ updatedAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalComments = await Comment.countDocuments();
+
+    const now = new Date();
+    const oneMonthsAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthsComments = await Comment.countDocuments({
+      createdAt: { $gte: oneMonthsAgo },
+    });
+
+    res.status(200).json({ comments, totalComments, lastMonthsComments });
+  } catch (error) {
+    next(error);
+  }
+};

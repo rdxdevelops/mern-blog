@@ -9,12 +9,14 @@ import {
   HiUser,
   HiArrowSmRight,
   HiDocumentText,
-  HiUserGroup,
   HiUsers,
+  HiAnnotation,
+  HiChartPie,
 } from "react-icons/hi";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signoutSuccess } from "../redux/user/userSlice";
+
 export default function DashSidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -45,6 +47,15 @@ export default function DashSidebar() {
     <Sidebar className="w-full md:w-56">
       <SidebarItems>
         <SidebarItemGroup>
+          {currentUser.isAdmin && (
+            <SidebarItem
+              href="/dashboard?tab=dashboard"
+              active={tab === "dashboard"}
+              icon={HiChartPie}>
+              Dashboard
+            </SidebarItem>
+          )}
+
           <SidebarItem
             href="/dashboard?tab=profile"
             active={tab === "profile"}
@@ -67,6 +78,12 @@ export default function DashSidebar() {
                 active={tab === "users"}
                 icon={HiUsers}>
                 Users
+              </SidebarItem>
+              <SidebarItem
+                href="/dashboard?tab=comments"
+                active={tab === "comments"}
+                icon={HiAnnotation}>
+                Comments
               </SidebarItem>
             </>
           )}
