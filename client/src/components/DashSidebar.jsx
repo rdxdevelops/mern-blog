@@ -50,7 +50,7 @@ export default function DashSidebar() {
           {currentUser.isAdmin && (
             <SidebarItem
               href="/dashboard?tab=dashboard"
-              active={tab === "dashboard"}
+              active={tab === "dashboard" || !tab}
               icon={HiChartPie}>
               Dashboard
             </SidebarItem>
