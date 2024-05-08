@@ -14,8 +14,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function UpdatePost() {
-   const { state: currentPost } = useLocation();
-  const [formData, setFormData] = useState(() => currentPost ? currentPost : {});
+  const { state: currentPost } = useLocation();
+  const [formData, setFormData] = useState(() => currentPost ?? {});
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
@@ -23,7 +23,7 @@ export default function UpdatePost() {
   const navigate = useNavigate();
   const { postId } = useParams();
   const { currentUser } = useSelector((state) => state.user);
- 
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
