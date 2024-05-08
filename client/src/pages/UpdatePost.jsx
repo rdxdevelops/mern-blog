@@ -14,7 +14,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function UpdatePost() {
-  const [formData, setFormData] = useState({});
+   const { state: currentPost } = useLocation();
+  const [formData, setFormData] = useState(() => currentPost ? currentPost : {});
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
@@ -22,8 +23,7 @@ export default function UpdatePost() {
   const navigate = useNavigate();
   const { postId } = useParams();
   const { currentUser } = useSelector((state) => state.user);
-  const { state: currentPost } = useLocation();
-
+ 
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -42,7 +42,7 @@ export default function UpdatePost() {
       }
     };
 
-    currentPost ? setFormData(currentPost) : fetchPost();
+    !currentPost && fetchPost();
   }, [postId, currentPost]);
 
   const handleUploadImage = async () => {
@@ -81,6 +81,7 @@ export default function UpdatePost() {
       setImageFileUploadProgress(null);
     }
   };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     setError(null);
@@ -163,7 +164,7 @@ export default function UpdatePost() {
         )}
         {formData.image && (
           <img
-            src={formData.image || ""}
+            src={formData.image}
             alt="uploaded image"
             className="w-full h-72 object-cover"
           />
@@ -173,7 +174,7 @@ export default function UpdatePost() {
           placeholder="Write something..."
           className="h-72 mb-12"
           required
-          value={formData.content}
+          value={formData.content || ""}
           onChange={(value) => setFormData({ ...formData, content: value })}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">
