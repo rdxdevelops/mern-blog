@@ -36,6 +36,14 @@ body {
   text-decoration: underline;
 }
 
-.dark .post-content a:{
-  color: red
+.dark .post-content a: {
+  color: red;
+}
+
+.post-content ol {
+  list-style-type: decimal;
+}
+
+.post-content ul {
+  list-style-type: disc;
 }
