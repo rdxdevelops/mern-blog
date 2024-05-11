@@ -42,15 +42,13 @@ export const signin = async (req, res, next) => {
       { id: user._id, isAdmin: user.isAdmin },
       process.env.JWT_SECRET,
       {
-        expiresIn: "12h",
+        expiresIn: "1h",
       }
     );
 
     const { password: userPassword, ...rest } = user._doc;
-    res
-      .status(200)
-      .cookie("access_token", token, { httpOnly: true })
-      .json(rest);
+
+    res.status(200).cookie("access_token", token).json(rest);
   } catch (error) {
     next(error);
   }
@@ -65,14 +63,12 @@ export const google = async (req, res, next) => {
         { id: user._id, isAdmin: user.isAdmin },
         process.env.JWT_SECRET,
         {
-          expiresIn: "12h",
+          expiresIn: "1h",
         }
       );
       const { password: userPassword, ...rest } = await user._doc;
-      res
-        .status(200)
-        .cookie("access_token", token, { httpOnly: true })
-        .json(rest);
+
+      res.status(200).cookie("access_token", token).json(rest);
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
@@ -91,14 +87,16 @@ export const google = async (req, res, next) => {
         { id: newUser._id, isAdmin: newUser.isAdmin },
         process.env.JWT_SECRET,
         {
-          expiresIn: "12h",
+          expiresIn: "1h",
         }
       );
       const { password: userPassword, ...rest } = newUser._doc;
-      res
-        .status(200)
-        .cookie("access_token", token, { httpOnly: true })
-        .json(rest);
+      //   res
+      //     .status(200)
+      //     .cookie("access_token", token, { httpOnly: true }) => httpOnly: when set to true makes the cookie accessible only by the server
+      //     .json(rest);
+      // }
+      res.status(200).cookie("access_token", token).json(rest);
     }
   } catch (error) {
     next(error);
