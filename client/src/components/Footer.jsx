@@ -50,10 +50,10 @@ export default function Footer() {
               <FooterTitle title="About"></FooterTitle>
               <FooterLinkGroup col>
                 <FooterLink
-                  href="https://www.100jsprojects.com"
+                  href="https://www.freecodecamp.org/"
                   target="_blank"
                   rel="noopener noreferrer">
-                  100 JS Projects
+                  Free Code Camp
                 </FooterLink>
                 <FooterLink
                   href="/about"
