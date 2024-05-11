@@ -14,13 +14,22 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import { signoutSuccess } from "../redux/user/userSlice";
+import { useEffect, useState } from "react";
 
 export default function Header() {
-  const path = useLocation().pathname;
+  const { pathname: path, search } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(search);
+    const searchTermFromURL = urlParams.get("searchTerm");
+    searchTermFromURL ? setSearchTerm(searchTermFromURL) : setSearchTerm("");
+  }, [search]);
+
   const handleSignout = async () => {
     try {
       const res = await fetch("/api/user/signout", { method: "POST" });
@@ -36,6 +45,14 @@ export default function Header() {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchTerm) {
+      return;
+    }
+    navigate(`/search?searchTerm=${searchTerm}`);
+  };
+
   return (
     <Navbar className="border-b-2">
       <Link
@@ -46,12 +63,14 @@ export default function Header() {
         </span>
         Blog
       </Link>
-      <form>
+      <form onSubmit={handleSearch}>
         <TextInput
           type="text"
           placeholder="Search..."
           rightIcon={AiOutlineSearch}
           className="hidden lg:inline"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
       <Button className="w-12 h-10 lg:hidden" color="gray" pill>
@@ -78,6 +97,12 @@ export default function Header() {
                 {currentUser.email}
               </span>
             </DropdownHeader>
+
+            {currentUser.isAdmin && (
+              <Link to={"/dashboard?tab=dashboard"}>
+                <DropdownItem>Dashboard</DropdownItem>
+              </Link>
+            )}
             <Link to={"/dashboard?tab=profile"}>
               <DropdownItem>Profile</DropdownItem>
             </Link>
