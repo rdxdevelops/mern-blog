@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import moment from 'moment';
 export default function PostCard({ post }) {
   return (
     <div className="group relative w-full border border-teal-500 hover:border-2 h-[380px] overflow-hidden rounded-lg sm:w-[360px] transition-all">
@@ -11,7 +12,12 @@ export default function PostCard({ post }) {
       </Link>
       <div className="p-3 flex flex-col gap-2">
         <p className="text-lg font-semibold line-clamp-2">{post.title}</p>
-        <span className="italic text-sm">{post.category}</span>
+        <div className="flex justify-between items-center">
+          <span className="italic text-sm">{post.category}</span>
+          <span className="text-xs">
+            {moment(post.createdAt).format("DD/MM/YYYY h:mm A")}
+          </span>
+        </div>
         <Link
           to={`/post/${post.slug}`}
           state={post}
