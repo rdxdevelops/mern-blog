@@ -15,6 +15,7 @@ import PostPage from "./pages/PostPage";
 import ScrollToTop from "./components/ScrollToTop";
 import Search from "./pages/Search";
 import { useState } from "react";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const [isSidebarVisibleInDashboard, setIsSidebarVisibleInDashboard] =
@@ -50,11 +51,14 @@ export default function App() {
               />
             }
           />
+          {/* only admin routes */}
           <Route element={<OnlyAdminPrivateRoute />}>
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/update-post/:postId" element={<UpdatePost />} />
           </Route>
         </Route>
+        {/* NotFound Route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>
