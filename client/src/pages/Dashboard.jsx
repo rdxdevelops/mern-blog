@@ -7,7 +7,7 @@ import DashUsers from "../components/DashUsers";
 import DashComments from "../components/DashComments";
 import DashboardComponent from "../components/DashboardComponent";
 
-export default function Dashboard() {
+export default function Dashboard({ isSidebarVisibleInDashboard }) {
   const location = useLocation();
   const [tab, setTab] = useState("");
   useEffect(() => {
@@ -18,15 +18,21 @@ export default function Dashboard() {
     }
   }, [location.search]);
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="md:w-56">
+    // flex-col md:flex-row
+    <div className="min-h-screen flex">
+      <div
+        className={`md:w-56 ${
+          isSidebarVisibleInDashboard ? "w-full block" : "hidden md:block"
+        }`}>
         <DashSidebar />
       </div>
-      {tab === "profile" && <DashProfile />}
-      {tab === 'posts' && <DashPosts/>}
-      {tab === 'users' && <DashUsers/>}
-      {tab === 'comments' && <DashComments/>}
-      {(tab === 'dashboard' || !tab) && <DashboardComponent/>}
+      <div className={`${isSidebarVisibleInDashboard && "hidden"} w-full`}>
+        {tab === "profile" && <DashProfile />}
+        {tab === "posts" && <DashPosts />}
+        {tab === "users" && <DashUsers />}
+        {tab === "comments" && <DashComments />}
+        {(tab === "dashboard" || !tab) && <DashboardComponent />}
+      </div>
     </div>
   );
 }

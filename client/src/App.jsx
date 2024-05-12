@@ -14,12 +14,23 @@ import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
 import ScrollToTop from "./components/ScrollToTop";
 import Search from "./pages/Search";
+import { useState } from "react";
 
 export default function App() {
+  const [isSidebarVisibleInDashboard, setIsSidebarVisibleInDashboard] =
+    useState(false);
+
+  const handleDashboardSidebarToggle = () => {
+    setIsSidebarVisibleInDashboard(!isSidebarVisibleInDashboard);
+  };
+
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Header />
+      <Header
+        onDashboardSidebarToggle={handleDashboardSidebarToggle}
+        isSidebarVisibleInDashboard={isSidebarVisibleInDashboard}
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -31,7 +42,14 @@ export default function App() {
 
         {/* Private Routes */}
         <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <Dashboard
+                isSidebarVisibleInDashboard={isSidebarVisibleInDashboard}
+              />
+            }
+          />
           <Route element={<OnlyAdminPrivateRoute />}>
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/update-post/:postId" element={<UpdatePost />} />

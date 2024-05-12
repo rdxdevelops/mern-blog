@@ -16,8 +16,12 @@ import { toggleTheme } from "../redux/theme/themeSlice";
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { FiMenu } from "react-icons/fi";
 
-export default function Header() {
+export default function Header({
+  onDashboardSidebarToggle,
+  isSidebarVisibleInDashboard,
+}) {
   const { pathname: path, search } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,12 +29,19 @@ export default function Header() {
   const { theme } = useSelector((state) => state.theme);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearchBox, setShowSearchBox] = useState(false);
+  const [showSidebarToggleIcon, setShowSidebarToggleIcon] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(search);
     const searchTermFromURL = urlParams.get("searchTerm");
     searchTermFromURL ? setSearchTerm(searchTermFromURL) : setSearchTerm("");
   }, [search]);
+
+  useEffect(() => {
+    path === "/dashboard"
+      ? setShowSidebarToggleIcon(true)
+      : setShowSidebarToggleIcon(false);
+  }, [path]);
 
   const handleSignout = async () => {
     try {
@@ -96,6 +107,24 @@ export default function Header() {
 
       {!showSearchBox && (
         <>
+          {showSidebarToggleIcon && (
+            <div className="inline md:hidden p-2 rounded-full dark:hover:bg-gray-700 hover:bg-gray-100">
+              {isSidebarVisibleInDashboard ? (
+                <RxCross2
+                  size={25}
+                  onClick={onDashboardSidebarToggle}
+                  className="cursor-pointer"
+                />
+              ) : (
+                <FiMenu
+                  size={25}
+                  onClick={onDashboardSidebarToggle}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+          )}
+
           <Link
             to="/"
             className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white">
@@ -164,15 +193,14 @@ export default function Header() {
             <Navbar.Toggle />
           </div>
           <Navbar.Collapse>
-            {/* Navbar.Link as well as Link components return <a> tags and one a tag cannot be a descendent of another a tag, so we add assertion as = {'div'} to each of the Navbar.Link components */}
-            <Navbar.Link active={path === "/"} as={"div"}>
-              <Link to="/">Home</Link>
+            <Navbar.Link active={path === "/"} href="/" className="border-t dark:border-t-gray-700">
+              Home
             </Navbar.Link>
-            <Navbar.Link active={path === "/about"} as={"div"}>
-              <Link to="/about">About</Link>
+            <Navbar.Link active={path === "/about"} href="/about">
+              About
             </Navbar.Link>
-            <Navbar.Link active={path === "/projects"} as={"div"}>
-              <Link to="/projects">Projects</Link>
+            <Navbar.Link active={path === "/projects"} href="/projects">
+              Projects
             </Navbar.Link>
           </Navbar.Collapse>
         </>
