@@ -4,6 +4,7 @@ import { Button, Spinner } from "flowbite-react";
 import CallToAction from "../components/CallToAction";
 import CommentSection from "../components/CommentSection";
 import PostCard from "../components/PostCard";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -65,6 +66,13 @@ export default function PostPage() {
 
   return (
     <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
+      {currentPost && (
+        <MdOutlineKeyboardBackspace
+          onClick={() => history.back()}
+          className={`absolute h-10 w-14 p-2 text-lg dark:text-gray-300 rounded-full dark:bg-gray-800 bg-gray-200 cursor-pointer hover:p-1 transition-all transition-duration-300`}
+          size={20}
+        />
+      )}
       <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">
         {post.title}
       </h1>
