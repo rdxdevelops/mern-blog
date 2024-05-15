@@ -6,6 +6,7 @@ import {
   DropdownHeader,
   DropdownItem,
   Navbar,
+  NavbarLink,
   TextInput,
 } from "flowbite-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -112,13 +113,13 @@ export default function Header({
               {isSidebarVisibleInDashboard ? (
                 <RxCross2
                   size={25}
-                  onClick={onDashboardSidebarToggle}
+                  onClick={() => onDashboardSidebarToggle((prev) => !prev)}
                   className="cursor-pointer"
                 />
               ) : (
                 <FiMenu
                   size={25}
-                  onClick={onDashboardSidebarToggle}
+                  onClick={() => onDashboardSidebarToggle((prev) => !prev)}
                   className="cursor-pointer"
                 />
               )}
@@ -152,7 +153,7 @@ export default function Header({
           </Button>
           <div className="flex gap-2 md:order-2">
             <Button
-              className="w-12 h-10 hidden sm:inline"
+              className="w-12 h-10 hidden sm:inline focus:!ring-0"
               color="gray"
               pill
               onClick={() => dispatch(toggleTheme())}>
@@ -173,15 +174,20 @@ export default function Header({
                 </DropdownHeader>
 
                 {currentUser.isAdmin && (
-                  <Link to={"/dashboard?tab=dashboard"}>
-                    <DropdownItem>Dashboard</DropdownItem>
-                  </Link>
+                  <>
+                    <Link to={"/dashboard?tab=dashboard"}>
+                      <DropdownItem>Dashboard</DropdownItem>
+                    </Link>
+                    <DropdownDivider />
+                  </>
                 )}
                 <Link to={"/dashboard?tab=profile"}>
                   <DropdownItem>Profile</DropdownItem>
                 </Link>
                 <DropdownDivider />
-                <DropdownItem onClick={handleSignout}>Sign out</DropdownItem>
+                <DropdownItem onClick={handleSignout} className="!text-red-500">
+                  Sign out
+                </DropdownItem>
               </Dropdown>
             ) : (
               <Link to="/sign-in">
@@ -193,15 +199,30 @@ export default function Header({
             <Navbar.Toggle />
           </div>
           <Navbar.Collapse>
-            <Navbar.Link active={path === "/"} href="/" className="border-t dark:border-t-gray-700">
-              Home
-            </Navbar.Link>
-            <Navbar.Link active={path === "/about"} href="/about">
-              About
-            </Navbar.Link>
-            <Navbar.Link active={path === "/projects"} href="/projects">
-              Projects
-            </Navbar.Link>
+            <NavbarLink
+              active={path === "/"}
+              className="border-b border-b-teal-500 cursor-pointer"
+              as={"div"}>
+              <Link to={"/"} className="flex">
+                Home
+              </Link>
+            </NavbarLink>
+            <NavbarLink
+              active={path === "/about"}
+              className="border-b  border-b-teal-500"
+              as={"div"}>
+              <Link to={"/about"} className="flex">
+                About
+              </Link>
+            </NavbarLink>
+            <NavbarLink
+              active={path === "/projects"}
+              className="border-b  border-b-teal-500"
+              as={"div"}>
+              <Link to={"/projects"} className="flex">
+                Projects
+              </Link>
+            </NavbarLink>
           </Navbar.Collapse>
         </>
       )}
