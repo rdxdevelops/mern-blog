@@ -21,15 +21,12 @@ export default function App() {
   const [isSidebarVisibleInDashboard, setIsSidebarVisibleInDashboard] =
     useState(false);
 
-  const handleDashboardSidebarToggle = () => {
-    setIsSidebarVisibleInDashboard(!isSidebarVisibleInDashboard);
-  };
 
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Header
-        onDashboardSidebarToggle={handleDashboardSidebarToggle}
+        onDashboardSidebarToggle={setIsSidebarVisibleInDashboard}
         isSidebarVisibleInDashboard={isSidebarVisibleInDashboard}
       />
       <Routes>
@@ -48,6 +45,7 @@ export default function App() {
             element={
               <Dashboard
                 isSidebarVisibleInDashboard={isSidebarVisibleInDashboard}
+                onDashboardSidebarToggle={setIsSidebarVisibleInDashboard}
               />
             }
           />

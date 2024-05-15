@@ -7,7 +7,10 @@ import DashUsers from "../components/DashUsers";
 import DashComments from "../components/DashComments";
 import DashboardComponent from "../components/DashboardComponent";
 
-export default function Dashboard({ isSidebarVisibleInDashboard }) {
+export default function Dashboard({
+  isSidebarVisibleInDashboard,
+  onDashboardSidebarToggle,
+}) {
   const location = useLocation();
   const [tab, setTab] = useState("");
   useEffect(() => {
@@ -24,9 +27,12 @@ export default function Dashboard({ isSidebarVisibleInDashboard }) {
         className={`md:w-56 ${
           isSidebarVisibleInDashboard ? "w-full block" : "hidden md:block"
         }`}>
-        <DashSidebar />
+        <DashSidebar onDashboardSidebarToggle={onDashboardSidebarToggle} />
       </div>
-      <div className={`${isSidebarVisibleInDashboard && "hidden"} w-full`}>
+      <div
+        className={`${
+          isSidebarVisibleInDashboard && "hidden md:block"
+        } w-full`}>
         {tab === "profile" && <DashProfile />}
         {tab === "posts" && <DashPosts />}
         {tab === "users" && <DashUsers />}
